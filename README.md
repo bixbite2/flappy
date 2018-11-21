@@ -1,1 +1,1 @@
-# flappy
+# flappy-pimba
