@@ -48,8 +48,10 @@ bloco = {
     sound: new Audio("sound/sfx_wing.ogg"),
     pula: function() {
         if (this.y - this.altura > 0) {
-            this.velocidade = -this.forca;
-            this.sound.play();
+            if (!bloco.morto) {
+                this.velocidade = -this.forca;
+                this.sound.play();
+            }
         }
     },
     atualiza: function() {
@@ -120,7 +122,7 @@ function criatubo() {
         x: LARGURA,
         gapPos: Math.random() * (ALTURA - chao.altura - tubo.gap - tubo.minheight),
         speed: 9,
-
+        permaGap: tubo.gap,
         atualiza: function() {
             this.x -= this.speed;
             if (bloco.x > this.x && !this.passo) {
@@ -128,7 +130,7 @@ function criatubo() {
                 this.passo = true;
             }
             if (bloco.x + bloco.largura > this.x && bloco.x < this.x + tubo.largura) {
-                if (!(bloco.y > this.gapPos && bloco.y + bloco.altura < this.gapPos + tubo.gap)) {
+                if (!(bloco.y > this.gapPos && bloco.y + bloco.altura < this.gapPos + this.permaGap)) {
                     console.log("opa");
                     bloco.morto = true;
                 }
@@ -145,7 +147,7 @@ function criatubo() {
                 this.botImg = document.getElementById('bottubo1');
             }
             ctx.drawImage(this.topImg, this.x, -tubo.altura + this.gapPos, tubo.largura, tubo.altura);
-            ctx.drawImage(this.botImg, this.x, this.gapPos + tubo.gap, tubo.largura, tubo.altura);
+            ctx.drawImage(this.botImg, this.x, this.gapPos + this.permaGap, tubo.largura, tubo.altura);
         }
 
     }
@@ -191,8 +193,9 @@ function roda() {
 
 function atualiza() {
 
-    if (bloco.pontuacao == 5) {
+    if (bloco.pontuacao == 2) {
         bloco.estagio = 2;
+        tubo.gap = 200;
     }
 
     frames++;
